@@ -2,7 +2,7 @@ import './App.css';
 
 import React, { useEffect, useState } from 'react';
 
-import WaveSvg from './WaveSvg2';
+import WaveSvg from './WaveSvg3';
 
 let AudioContext;
 let audioContent: any;
