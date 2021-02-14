@@ -1,8 +1,6 @@
 import './App.css';
 
-import React, { useEffect, useState } from 'react';
-
-import WaveSvg from './WaveSvg3';
+import { useEffect, useState } from 'react';
 
 let AudioContext;
 let audioContent: any;
@@ -27,8 +25,7 @@ function App() {
       console.log('before readDB')
       
       const readDB = () => {
-        // console.log('in readDB')
-        setTimeout(readDB, 100);
+        setTimeout(readDB, 80);
         analyser.getByteFrequencyData(frequencyArray);
         var total = 0
         for (var i = 0; i < 255; i++) {
@@ -39,7 +36,7 @@ function App() {
         var db = 20 * (Math.log(rms) / Math.log(10));
         db = Math.max(db, 0); // sanity check
         const dbF = Math.floor(db);
-        console.log("db: " + dbF);
+        // console.log("db: " + dbF);
         const dbMap = Math.min(Math.max(dbF-25, 1), 11); // db: 12 ~ 36, state: 1 ~ 11
         setState(dbMap);
       };
@@ -61,10 +58,9 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <WaveSvg number={state} />
+      <header className={`App-header color-${state}`}>
         <p>
-          Wave visualization
+          black & white visualization
         </p>
         <input type="range" min="1" max="11" value={state} id="myRange" onChange={(e) => {
           setState(parseInt(e.target.value))
