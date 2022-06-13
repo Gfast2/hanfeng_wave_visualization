@@ -25,10 +25,10 @@ function App() {
       var frequencyArray = new Uint8Array(bufferLength);
 
       console.log('before readDB')
-      
+
       const readDB = () => {
         // console.log('in readDB')
-        setTimeout(readDB, 100);
+        setTimeout(readDB, 80);
         analyser.getByteFrequencyData(frequencyArray);
         var total = 0
         for (var i = 0; i < 255; i++) {
@@ -48,15 +48,15 @@ function App() {
     };
 
     const soundNotAllowed = () => { console.log('sound not allowed') };
-    
+
     AudioContext = window.AudioContext;
     audioContent = new AudioContext();
-    
+
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(soundAllowed)
       .catch(soundNotAllowed);
 
-    
+
   }, []);
 
   return (
