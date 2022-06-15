@@ -12,6 +12,9 @@ function App() {
   useEffect(() => {
     const soundAllowed = (stream: any) => {
       console.log('sound allowed')
+      AudioContext = window.AudioContext;
+      audioContent = new AudioContext();
+
       var audioStream = audioContent.createMediaStreamSource(stream);
       var analyser = audioContent.createAnalyser();
       var fftSize = 1024;
@@ -23,7 +26,7 @@ function App() {
       var frequencyArray = new Uint8Array(bufferLength);
 
       console.log('before readDB')
-      
+
       const readDB = () => {
         setTimeout(readDB, 80);
         analyser.getByteFrequencyData(frequencyArray);
@@ -37,7 +40,7 @@ function App() {
         db = Math.max(db, 0); // sanity check
         const dbF = Math.floor(db);
         // console.log("db: " + dbF);
-        const dbMap = Math.min(Math.max(dbF-25, 1), 11); // db: 12 ~ 36, state: 1 ~ 11
+        const dbMap = Math.min(Math.max(dbF - 25, 1), 11); // db: 12 ~ 36, state: 1 ~ 11
         setState(dbMap);
       };
 
@@ -45,26 +48,23 @@ function App() {
     };
 
     const soundNotAllowed = () => { console.log('sound not allowed') };
-    
-    AudioContext = window.AudioContext;
-    audioContent = new AudioContext();
-    
+
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(soundAllowed)
       .catch(soundNotAllowed);
 
-    
+
   }, []);
 
   return (
     <div className="App">
       <header className={`App-header color-${state}`}>
-        <p>
+        {/* <p>
           black & white visualization
-        </p>
-        <input type="range" min="1" max="11" value={state} id="myRange" onChange={(e) => {
+        </p> */}
+        {/* <input type="range" min="1" max="11" value={state} id="myRange" onChange={(e) => {
           setState(parseInt(e.target.value))
-        }}></input>
+        }}></input> */}
         {btnShow ? <button onClick={() => {
           audioContent.resume();
           setBtnShow(false);
