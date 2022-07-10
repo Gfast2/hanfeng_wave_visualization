@@ -10,7 +10,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  transition: background-color 0.5s;
+  transition: background-color 0.15s;
 }
 
 .gray-1 {
@@ -73,4 +73,23 @@
 }
 .color-10 {
   background-color: hsl(calc(360 * 1), 80%, 50%);
+}
+
+.quality-1 {
+  background-color: #00FF00;
+}
+.quality-2 {
+  background-color: #FFFF00;
+}
+.quality-3 {
+  background-color: #FF8800;
+}
+.quality-4 {
+  background-color: #FF0000;
+}
+.quality-5 {
+  background-color: #99004C;
+}
+.quality-6 {
+  background-color: #000;
 }

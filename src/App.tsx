@@ -2,12 +2,17 @@ import './App.css';
 
 import { useEffect, useState } from 'react';
 
+import { getQuality } from './util/qualityLookUp';
+import {waitFor} from './util/waitFor'
+
 let AudioContext;
 let audioContent: any;
 
+const AIR_QUALITY_SERVER = "http://localhost:8001/";
+
 function App() {
-  const [state, setState] = useState(1);
-  const [btnShow, setBtnShow] = useState(true);
+  const [soundState, setSoundState] = useState(1);
+  const [airState, setAirState] = useState(1);
 
   useEffect(() => {
     const soundAllowed = (stream: any) => {
@@ -41,7 +46,13 @@ function App() {
         const dbF = Math.floor(db);
         // console.log("db: " + dbF);
         const dbMap = Math.min(Math.max(dbF - 25, 1), 11); // db: 12 ~ 36, state: 1 ~ 11
-        setState(dbMap);
+        setSoundState(dbMap);
+
+        if(dbMap !== 1) {
+          fetch(`${AIR_QUALITY_SERVER}sound/${dbMap}`)
+        }
+
+        // console.log(dbMap)
       };
 
       readDB();
@@ -53,23 +64,41 @@ function App() {
       .then(soundAllowed)
       .catch(soundNotAllowed);
 
+      // audioContent.resume();
 
   }, []);
 
+
+
+  useEffect(() => {
+    const fetchQuality = async() => {
+      let result;
+
+      try {
+        result = await fetch(`${AIR_QUALITY_SERVER}quality`)
+      } catch (e) {
+        console.error("issue when fetching air quality from localhost:8001")
+      }
+
+      const payload = await result?.text();
+      setAirState(getQuality(payload));
+
+      console.log(payload);
+
+      await waitFor(1000);
+
+      fetchQuality();
+    }
+    fetchQuality()
+  }, [])
+
+  const shouldShownSoundColor = soundState !== 1;
+
+  const color = shouldShownSoundColor ? `color-${soundState}` : `quality-${airState}`
+
   return (
     <div className="App">
-      <header className={`App-header color-${state}`}>
-        {/* <p>
-          black & white visualization
-        </p> */}
-        {/* <input type="range" min="1" max="11" value={state} id="myRange" onChange={(e) => {
-          setState(parseInt(e.target.value))
-        }}></input> */}
-        {btnShow ? <button onClick={() => {
-          audioContent.resume();
-          setBtnShow(false);
-        }}>Start</button> : null}
-      </header>
+      <header className={`App-header ${color}`}></header>
     </div>
   );
 }
