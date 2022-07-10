@@ -32,7 +32,7 @@ function App() {
 
       console.log('before readDB')
 
-      const readDB = () => {
+      const readDB = async() => {
         setTimeout(readDB, 80);
         analyser.getByteFrequencyData(frequencyArray);
         var total = 0
@@ -49,10 +49,14 @@ function App() {
         setSoundState(dbMap);
 
         if(dbMap !== 1) {
-          fetch(`${AIR_QUALITY_SERVER}sound/${dbMap}`)
+          try{
+            await fetch(`${AIR_QUALITY_SERVER}sound?level=${dbMap}`)
+          } catch (e) {
+            console.error('issue when send sound')
+          }
         }
 
-        // console.log(dbMap)
+        console.log(dbMap)
       };
 
       readDB();
